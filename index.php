@@ -7,7 +7,7 @@ include 'fetchApiData.php';
 session_start();
 
 // We check that the session exists, if it does not exist, we create it.
-if(!isset($_SESSION['jokes'])){
+if (!isset($_SESSION['jokes'])) {
     $_SESSION['jokes'] = [];
 }
 
@@ -22,14 +22,24 @@ $randomJoke = null;
 // we check that there is an answer get and that it contains a category
 if ($_SERVER['REQUEST_METHOD'] == "GET" && isset($_GET["categories"])) {
 
-    // Get the category
-    $selectedCategory = $_GET["categories"];
+    // Get the category and clean the variable with: urlencode
+    $selectedCategory = urlencode($_GET["categories"]);
 
-    // We clean the variable to pass it through the url
-    $randomJoke = fetchApiData("https://api.chucknorris.io/jokes/random?category=" . urlencode($selectedCategory));
+    if ($selectedCategory != "") {
 
-    //We add the value to the session
-    $_SESSION['jokes'][] = $randomJoke["value"];
+        // We clean the variable to pass it through the url
+        $randomJoke = fetchApiData("https://api.chucknorris.io/jokes/random?category=" . $selectedCategory);
+
+        //We add the value to the session
+        $_SESSION['jokes'][] = $randomJoke["value"];
+
+    }
+
+    // We restart the header so that there is no data in it,
+    // so when we restart the web we will not get a new joke.
+    header('Location: ' . strtok($_SERVER["REQUEST_URI"], '?'));
+    exit;
+
 }
 
 ?>
@@ -40,8 +50,6 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && isset($_GET["categories"])) {
 <head>
     <meta charset="UFT-8">
     <title>Prueba Técnica</title>
-    <script>
-    </script>
 </head>
 
 <body>
@@ -49,6 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && isset($_GET["categories"])) {
 
     <form action="index.php" method="get">
         <select name="categories">
+            <option value="" disabled selected>Select category</option>
             <?php foreach ($categories as $category) : ?>
                 <option value="<?= $category ?>"><?= $category ?></option>
             <?php endforeach; ?>
@@ -58,8 +67,8 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && isset($_GET["categories"])) {
 
     <?php
     foreach ($_SESSION['jokes'] as $joke) {
-        echo "<p>". $joke ."</p>";
-    } 
+        echo "<p>" . $joke . "</p>";
+    }
     ?>
 
     <form action="resetSession.php" method="post">
