@@ -19,7 +19,7 @@ function fetchApiData(String $url)
         throw new Exception('No se pudo inicializar cURL.');
     }
 
-    // Configuramos los parametros de esta:
+    // We configure the parameters
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
     // Execute the cURL request

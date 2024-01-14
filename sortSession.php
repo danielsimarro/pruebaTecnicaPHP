@@ -1,11 +1,11 @@
 <?php
-// Iniciar sesión
+// We start the user's session
 session_start();
 
-// Ordenar la variable de sesión
+// Sort session variable
 sort($_SESSION['jokes']);
 
-// Redirigir al usuario de vuelta a la página principal
+// Redirect user back to home page
 header("Location: index.php");
 exit();
 ?>
