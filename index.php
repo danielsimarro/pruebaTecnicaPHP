@@ -9,9 +9,20 @@ try {
     $url = "https://api.chucknorris.io/jokes/categories";
     $categories = fetchApiData($url);
 } catch (Exception $e) {
-    $errorMessage = $e->getMessage();
-    echo "<div class='error'>Error: $errorMessage</div>";
     $categories = [];
+}
+
+// We declare the variable jokes to null
+$randomJoke = null;
+
+// Every time we submit the form to get jokes, it will execute this code
+if ($_SERVER['REQUEST_METHOD'] == "GET") {
+
+    // Get the category
+    $selectedCategory = $_GET["categories"];
+
+    // We clean the variable to pass it through the url
+    $randomJoke = fetchApiData("https://api.chucknorris.io/jokes/random?category=" . urlencode($selectedCategory));
 }
 
 ?>
@@ -28,11 +39,22 @@ try {
 
 <body>
     <h1>Welcome to ChuckNorris</h1>
-    <select name="categories">
-        <?php foreach ($categories as $category) : ?>
-            <option value="<?= $category ?>"><?= $category ?></option>
-        <?php endforeach; ?>
-    </select>
+
+    <form action="index.php" method="get">
+        <select name="categories">
+            <?php foreach ($categories as $category) : ?>
+                <option value="<?= $category ?>"><?= $category ?></option>
+            <?php endforeach; ?>
+        </select>
+        <button type="submit">Get Joke</button>
+    </form>
+
+    <?php 
+        if($randomJoke !== null){
+            echo "<p>".$randomJoke["value"]."</p>";
+        }
+    ?>
+    
 </body>
 
 </html>
