@@ -34,14 +34,12 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && isset($_GET["categories"])) {
 
         //We add the value to the session
         $_SESSION['jokes'][] = $joke;
-
     }
 
     // We restart the header so that there is no data in it,
     // so when we restart the web we will not get a new joke.
     header('Location: ' . strtok($_SERVER["REQUEST_URI"], '?'));
     exit;
-
 }
 
 ?>
@@ -52,34 +50,52 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && isset($_GET["categories"])) {
 <head>
     <meta charset="UFT-8">
     <title>Prueba Técnica</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
 
 <body>
-    <h1>Welcome to ChuckNorris</h1>
 
-    <form action="index.php" method="get">
-        <select name="categories">
-            <option value="" disabled selected>Select category</option>
-            <?php foreach ($categories as $category) : ?>
-                <option value="<?= $category ?>"><?= $category ?></option>
-            <?php endforeach; ?>
-        </select>
-        <button type="submit">Get Joke</button>
-    </form>
+    <div class="container">
+        <h1 class="my-3">Welcome to ChuckNorris</h1>
 
-    <?php
-    foreach ($_SESSION['jokes'] as $joke) {
-        echo "<p>" . $joke . "</p>";
-    }
-    ?>
 
-    <form action="resetSession.php" method="post">
-        <button type="submit">Reset</button>
-    </form>
+        <form action="index.php" method="get">
+            <div class="row align-items-start">
+                <div class="col">
+                    <select name="categories" class="form-select">
+                        <option value="" disabled selected>Select category</option>
+                        <?php foreach ($categories as $category) : ?>
+                            <option value="<?= $category ?>"><?= $category ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="col mb-2">
+                    <button class="btn btn-primary" type="submit">Get Joke</button>
+                </div>
+        </form>
 
-    <form action="sortSession.php" method="post">
-        <button type="submit">Sort</button>
-    </form>
+
+        <ul class="list-group list-group-flush">
+        <?php
+        if(!empty($_SESSION['jokes'])){
+            foreach ($_SESSION['jokes'] as $joke) {
+                echo " <li class=list-group-item>" . $joke . "</li>";
+            }
+        }else{
+            echo "<li class=list-group-item>List is Empty</li>";
+        }
+        ?>
+        </ul>
+
+        <form action="sortSession.php" method="post">
+            <button type="submit" class="btn btn-info my-2">Order</button>
+        </form>
+
+        <form  action="resetSession.php" method="post">
+            <button  type="submit" class="btn btn-danger ">Reset</button>
+        </form>
+
+    </div>
 
 </body>
 
