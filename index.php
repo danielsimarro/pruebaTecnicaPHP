@@ -62,6 +62,10 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && isset($_GET["categories"])) {
     } 
     ?>
 
+    <form action="resetSession.php" method="post">
+        <button type="submit">Reset</button>
+    </form>
+
 </body>
 
 </html>
