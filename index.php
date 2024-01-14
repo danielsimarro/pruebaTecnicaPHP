@@ -3,26 +3,33 @@
 // Import fetchApiData
 include 'fetchApiData.php';
 
-// Store the array in a variable
-// performing a try in case an exception occurs
-try {
-    $url = "https://api.chucknorris.io/jokes/categories";
-    $categories = fetchApiData($url);
-} catch (Exception $e) {
-    $categories = [];
+// We start the user's session
+session_start();
+
+// We check that the session exists, if it does not exist, we create it.
+if(!isset($_SESSION['jokes'])){
+    $_SESSION['jokes'] = [];
 }
+
+// We send the url to the function
+$url = "https://api.chucknorris.io/jokes/categories";
+$categories = fetchApiData($url);
 
 // We declare the variable jokes to null
 $randomJoke = null;
 
 // Every time we submit the form to get jokes, it will execute this code
-if ($_SERVER['REQUEST_METHOD'] == "GET") {
+// we check that there is an answer get and that it contains a category
+if ($_SERVER['REQUEST_METHOD'] == "GET" && isset($_GET["categories"])) {
 
     // Get the category
     $selectedCategory = $_GET["categories"];
 
     // We clean the variable to pass it through the url
     $randomJoke = fetchApiData("https://api.chucknorris.io/jokes/random?category=" . urlencode($selectedCategory));
+
+    //We add the value to the session
+    $_SESSION['jokes'][] = $randomJoke["value"];
 }
 
 ?>
@@ -49,12 +56,12 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
         <button type="submit">Get Joke</button>
     </form>
 
-    <?php 
-        if($randomJoke !== null){
-            echo "<p>".$randomJoke["value"]."</p>";
-        }
+    <?php
+    foreach ($_SESSION['jokes'] as $joke) {
+        echo "<p>". $joke ."</p>";
+    } 
     ?>
-    
+
 </body>
 
 </html>
