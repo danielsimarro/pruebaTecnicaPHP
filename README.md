@@ -5,8 +5,8 @@ Get random jokes through an api, selecting the category of each joke.
 
 ## Installation
 
-1- Download Xampp and open it. once opened, raise apache.
+1- Download Xampp and open it. Once opened, raise apache.
 
 2- Put the project in the htdocs folder.
 
-3- Then type in the browser: http://localhost/pruebaTecnicaPHP/index.php
+3- Then write in the browser: http://localhost/pruebaTecnicaPHP/index.php
