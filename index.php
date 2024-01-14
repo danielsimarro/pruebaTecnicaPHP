@@ -9,7 +9,8 @@ try {
     $url = "https://api.chucknorris.io/jokes/categories";
     $categories = fetchApiData($url);
 } catch (Exception $e) {
-    echo "Error: " . $e->getMessage();
+    $errorMessage = $e->getMessage();
+    echo "<div class='error'>Error: $errorMessage</div>";
     $categories = [];
 }
 
@@ -27,7 +28,11 @@ try {
 
 <body>
     <h1>Welcome to ChuckNorris</h1>
-    <?php echo $categories[0] ?>
+    <select name="categories">
+        <?php foreach ($categories as $category) : ?>
+            <option value="<?= $category ?>"><?= $category ?></option>
+        <?php endforeach; ?>
+    </select>
 </body>
 
 </html>
