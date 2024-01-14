@@ -30,8 +30,10 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && isset($_GET["categories"])) {
         // We clean the variable to pass it through the url
         $randomJoke = fetchApiData("https://api.chucknorris.io/jokes/random?category=" . $selectedCategory);
 
+        $joke = $selectedCategory . " - " . $randomJoke["value"];
+
         //We add the value to the session
-        $_SESSION['jokes'][] = $randomJoke["value"];
+        $_SESSION['jokes'][] = $joke;
 
     }
 
@@ -73,6 +75,10 @@ if ($_SERVER['REQUEST_METHOD'] == "GET" && isset($_GET["categories"])) {
 
     <form action="resetSession.php" method="post">
         <button type="submit">Reset</button>
+    </form>
+
+    <form action="sortSession.php" method="post">
+        <button type="submit">Sort</button>
     </form>
 
 </body>
